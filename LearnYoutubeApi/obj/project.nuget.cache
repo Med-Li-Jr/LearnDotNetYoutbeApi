@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "83Zsyc3cxAYnl8tZa+D+9RDRwG+vt0HdrwAvG+jpR+GeE6/hp5oB2vAXoN3Yj5OFwIBd/rV/P6lwXFlYFHGJYw==",
+  "success": true,
+  "projectFilePath": "D:\\DocStream\\LearnYoutubeApi\\LearnYoutubeApi\\LearnYoutubeApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\myself\\.nuget\\packages\\google.apis\\1.51.0\\google.apis.1.51.0.nupkg.sha512",
+    "C:\\Users\\myself\\.nuget\\packages\\google.apis.auth\\1.51.0\\google.apis.auth.1.51.0.nupkg.sha512",
+    "C:\\Users\\myself\\.nuget\\packages\\google.apis.core\\1.51.0\\google.apis.core.1.51.0.nupkg.sha512",
+    "C:\\Users\\myself\\.nuget\\packages\\google.apis.youtube.v3\\1.51.0.2343\\google.apis.youtube.v3.1.51.0.2343.nupkg.sha512",
+    "C:\\Users\\myself\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
