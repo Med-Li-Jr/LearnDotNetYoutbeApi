@@ -5,4 +5,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Google.Apis" Version="1.51.0" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.51.0.2343" />
+    <PackageReference Include="System.Windows.Extensions" Version="5.0.0" />
+  </ItemGroup>
+
 </Project>

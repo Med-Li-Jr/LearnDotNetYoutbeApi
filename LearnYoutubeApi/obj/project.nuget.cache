@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "83Zsyc3cxAYnl8tZa+D+9RDRwG+vt0HdrwAvG+jpR+GeE6/hp5oB2vAXoN3Yj5OFwIBd/rV/P6lwXFlYFHGJYw==",
+  "dgSpecHash": "mF3m+L5XwmAuLwkP9rRKiODIbWwhkMjUeOO+AjoueCFDrIUjTFBuzV+EHF/tWaGj5i76AUAgmQliAqq4PqCRyQ==",
   "success": true,
   "projectFilePath": "D:\\DocStream\\LearnYoutubeApi\\LearnYoutubeApi\\LearnYoutubeApi.csproj",
   "expectedPackageFiles": [
@@ -8,7 +8,11 @@
     "C:\\Users\\myself\\.nuget\\packages\\google.apis.auth\\1.51.0\\google.apis.auth.1.51.0.nupkg.sha512",
     "C:\\Users\\myself\\.nuget\\packages\\google.apis.core\\1.51.0\\google.apis.core.1.51.0.nupkg.sha512",
     "C:\\Users\\myself\\.nuget\\packages\\google.apis.youtube.v3\\1.51.0.2343\\google.apis.youtube.v3.1.51.0.2343.nupkg.sha512",
-    "C:\\Users\\myself\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+    "C:\\Users\\myself\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\myself\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\myself\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\myself\\.nuget\\packages\\system.drawing.common\\5.0.0\\system.drawing.common.5.0.0.nupkg.sha512",
+    "C:\\Users\\myself\\.nuget\\packages\\system.windows.extensions\\5.0.0\\system.windows.extensions.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }
