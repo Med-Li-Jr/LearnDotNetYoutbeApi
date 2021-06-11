@@ -1,8 +1,13 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
+using LearnYoutubeApi;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Media;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,95 +44,70 @@ namespace LearnProgram
             new SoundPlayer("D:\\mic.wav").Play();
             Console.WriteLine("Play record End PlayRecording....");
         }
-        // The method that will be called when the thread is started.
-        public void InstanceMethod()
-        {
-            Console.WriteLine(
-                "ServerClass.InstanceMethod is running on another thread.");
 
-            // Pause for a moment to provide a delay to make
-            // threads more apparent.
-            Thread.Sleep(10000);
-            Console.WriteLine(
-                "The instance method called by the worker thread has ended.");
-        }
-
-        public static void StaticMethod()
-        {
-            Console.WriteLine(
-                "ServerClass.StaticMethod is running on another thread.");
-
-            // Pause for a moment to provide a delay to make
-            // threads more apparent.
-            Thread.Sleep(3000);
-            Console.WriteLine(
-                "The static method called by the worker thread has ended.");
-        }
     }
 
     class Program
     {
         [STAThread]
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
 
-            ServerClass serverObject = new ServerClass();
-
-            // Create the thread object, passing in the
-            // serverObject.InstanceMethod method using a
-            // ThreadStart delegate.
-
-            Console.WriteLine("welcome to record input");
-
-            Thread InstanceCaller = new Thread(
-                new ThreadStart(ServerClass.StartRecording));
-
-            // Start the thread.
-            InstanceCaller.Start();
-
-            //Thread.Sleep(10000);
-            //// Create the thread object, passing in the
-            //// serverObject.StaticMethod method using a
-            //// ThreadStart delegate.
-            //Thread StaticCaller = new Thread(
-            //    new ThreadStart(ServerClass.StopRecording));
-
+            //Thread InstanceCaller = new Thread(
+            //    new ThreadStart(ServerClass.StartRecording));
             //// Start the thread.
-            //StaticCaller.Start();
-            //Thread.Sleep(5000);
-            //Thread StaticCallerPlay = new Thread(
-            //    new ThreadStart(ServerClass.PlayRecording));
+            //InstanceCaller.Start();
 
-            //// Start the thread.
-            //StaticCallerPlay.Start();
+            try
+            {
+                await GetResponseFromYoutubeApi();
+                //new Program().Run().Wait();
+            }
+            catch (AggregateException ex)
+            {
+                foreach (var e in ex.InnerExceptions)
+                {
+                    Console.WriteLine("Error: " + e.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.Message);
+            }
 
-            Console.WriteLine("The Main() thread calls this after "
-                + "starting the new StaticCaller thread.");
+            Console.WriteLine("Press any key to continue...5");
+            Console.ReadKey();
+        }
 
 
-            //Console.WriteLine("YouTube Data API: Search");
-            //Console.WriteLine("========================");
+        public static async Task GetResponseFromYoutubeApi()
+        {
+            var serverAPI = new HttpClient();
+            serverAPI.BaseAddress = new Uri("https://www.googleapis.com/youtube/v3/");
 
-            //try
-            //{
-            //    new Program().Run().Wait();
-            //}
-            //catch (AggregateException ex)
-            //{
-            //    foreach (var e in ex.InnerExceptions)
-            //    {
-            //        Console.WriteLine("Error: " + e.Message);
-            //    }
-            //}
+            var key = "AIzaSyDsRio2jTT4MLCVsu2zpKXJNqCp-WXB5-4";
+            var channelId = "UCgR3SrM8T6GCFUTuxSFlR7A";
+            string urlApi = serverAPI.BaseAddress + "search?key="+ key +
+                "&channelId="+channelId +"&part=snippet,id&order=date&maxResults=20";
 
-            //Console.WriteLine("Press any key to continue...");
-            //Console.ReadKey();
+            HttpResponseMessage reuqestResponseAPI = await serverAPI.GetAsync(urlApi);
+            var results = reuqestResponseAPI.Content.ReadAsStringAsync().Result;
+            dynamic jsonResp = JsonConvert.DeserializeObject<ExpandoObject>(results, new ExpandoObjectConverter());
+
+            if (jsonResp != null && jsonResp.items != null)
+            {
+                for(int i = 0; i < 2; i++)
+                {
+                    YoutubeVideo vid = YoutubeVideo.FromApi(jsonResp.items[i]);
+                    Console.WriteLine("result est ! ");
+                    Console.WriteLine(vid.ToString());
+                }
+            }
         }
 
 
 
-
-        private async Task Runs()
+        private async Task Run()
         {
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
