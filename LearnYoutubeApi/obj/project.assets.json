@@ -90,6 +90,18 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "Selenium.WebDriver/3.141.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/WebDriver.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/WebDriver.dll": {}
+        }
+      },
       "System.Drawing.Common/5.0.0": {
         "type": "package",
         "dependencies": {
@@ -308,6 +320,25 @@
         "packageIcon.png"
       ]
     },
+    "Selenium.WebDriver/3.141.0": {
+      "sha512": "wPqzXO3f79DzqauTZSzLMKiaBCN0Z2Mv7KvWP+hnV6EL88zh/pJJnFtdIR1X5wa3hsTOpF/bBJs45rz7kArsiA==",
+      "type": "package",
+      "path": "selenium.webdriver/3.141.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/WebDriver.dll",
+        "lib/net35/WebDriver.xml",
+        "lib/net40/WebDriver.dll",
+        "lib/net40/WebDriver.xml",
+        "lib/net45/WebDriver.dll",
+        "lib/net45/WebDriver.xml",
+        "lib/netstandard2.0/WebDriver.dll",
+        "lib/netstandard2.0/WebDriver.xml",
+        "selenium.webdriver.3.141.0.nupkg.sha512",
+        "selenium.webdriver.nuspec"
+      ]
+    },
     "System.Drawing.Common/5.0.0": {
       "sha512": "SztFwAnpfKC8+sEKXAFxCBWhKQaEd97EiOL7oZJZP56zbqnLpmxACWA8aGseaUExciuEAUuR9dY8f7HkTRAdnw==",
       "type": "package",
@@ -377,6 +408,7 @@
     ".NETCoreApp,Version=v3.1": [
       "Google.Apis >= 1.51.0",
       "Google.Apis.YouTube.v3 >= 1.51.0.2343",
+      "Selenium.WebDriver >= 3.141.0",
       "System.Windows.Extensions >= 5.0.0"
     ]
   },
@@ -431,6 +463,10 @@
           "Google.Apis.YouTube.v3": {
             "target": "Package",
             "version": "[1.51.0.2343, )"
+          },
+          "Selenium.WebDriver": {
+            "target": "Package",
+            "version": "[3.141.0, )"
           },
           "System.Windows.Extensions": {
             "target": "Package",

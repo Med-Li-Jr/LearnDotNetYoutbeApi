@@ -72,13 +72,13 @@ namespace LearnProgram
                 //{
                 //    Id = "ZEGrw_2Tl6E"
                 //});
-                //await GetResponseFromYoutubeApi();
-                Run(new YoutubeVideo()
-                {
-                    Id = "paDsZzR5KeI",
-                    Title = "TestVide_paDsZzR5KeI",
-                    Duration = "10"
-                }).Wait();
+                await GetResponseFromYoutubeApi();
+                //Run(new YoutubeVideo()
+                //{
+                //    Id = "paDsZzR5KeI",
+                //    Title = "TestVide_paDsZzR5KeI",
+                //    Duration = "10"
+                //}).Wait();
             }
             catch (AggregateException ex)
             {
@@ -117,6 +117,7 @@ namespace LearnProgram
                     Console.WriteLine("---------------------------------------------------------------");
 
                 }
+                SeleniumService.CloseWindowSelenium();
             }
         }
 
@@ -165,19 +166,21 @@ namespace LearnProgram
 
         private static async Task Run(YoutubeVideo Video)
         {
-
+            SeleniumService.OpenAnYoutubeVideo(Video);
+            Thread.Sleep(3000);
             Console.WriteLine("Start Recording .... vid " + Video.Title);
             record("open new Type waveaudio Alias recsound", "", 0, 0);
             record("record recsound", "", 0, 0);
 
             int recordDuree = int.Parse(Video.Duration) * 1000 + 3;
             Console.WriteLine("Durree = " + recordDuree);
-            Thread.Sleep(recordDuree);
+            Thread.Sleep(13000);
 
             Console.WriteLine("Stop Record ....");
-            record("save recsound D:\\video_" + Video.Id + ".wav", "", 0, 0);
+            record("save recsound D:\\SoundsYoutube\\video_" + Video.Id + ".wav", "", 0, 0);
             record("close recsound", "", 0, 0);
-            Thread.Sleep(5000);
+            Thread.Sleep(3000);
+            //SeleniumService.CloseWindowSelenium();
             Console.WriteLine("End Recording.... vid " + Video.Title);
 
             //var youtubeService = new YouTubeService(new BaseClientService.Initializer()
