@@ -19,12 +19,12 @@ namespace LearnProgram
         [DllImport("winmm.dll", EntryPoint = "mciSendStringA", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         private static extern int record(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
 
-        public static void StartRecording()
+        public static void StartRecording(string DurationRecord)
         {
             Console.WriteLine("Recording ....");
             record("open new Type waveaudio Alias recsound", "", 0, 0);
             record("record recsound", "", 0, 0);
-            Thread.Sleep(10000);
+            Thread.Sleep(int.Parse(DurationRecord) + 3);
             StopRecording();
             Thread.Sleep(5000);
             Console.WriteLine("Recording End StartRecording....");
@@ -49,6 +49,13 @@ namespace LearnProgram
 
     class Program
     {
+        [DllImport("winmm.dll", EntryPoint = "mciSendStringA", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        private static extern int record(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
+
+        static HttpClient serverAPI = new HttpClient();
+
+        static string keyApi = "AIzaSyDsRio2jTT4MLCVsu2zpKXJNqCp-WXB5-4";
+
         [STAThread]
         static async Task Main(string[] args)
         {
@@ -56,12 +63,22 @@ namespace LearnProgram
             //Thread InstanceCaller = new Thread(
             //    new ThreadStart(ServerClass.StartRecording));
             //// Start the thread.
-            //InstanceCaller.Start();
+            //InstanceCaller.Start
+            serverAPI.BaseAddress = new Uri("https://www.googleapis.com/youtube/v3/");
 
             try
             {
-                await GetResponseFromYoutubeApi();
-                //new Program().Run().Wait();
+                //await GetDetailVideoYoutubeApi(new YoutubeVideo()
+                //{
+                //    Id = "ZEGrw_2Tl6E"
+                //});
+                //await GetResponseFromYoutubeApi();
+                Run(new YoutubeVideo()
+                {
+                    Id = "paDsZzR5KeI",
+                    Title = "TestVide_paDsZzR5KeI",
+                    Duration = "10"
+                }).Wait();
             }
             catch (AggregateException ex)
             {
@@ -82,13 +99,9 @@ namespace LearnProgram
 
         public static async Task GetResponseFromYoutubeApi()
         {
-            var serverAPI = new HttpClient();
-            serverAPI.BaseAddress = new Uri("https://www.googleapis.com/youtube/v3/");
-
-            var key = "AIzaSyDsRio2jTT4MLCVsu2zpKXJNqCp-WXB5-4";
             var channelId = "UCgR3SrM8T6GCFUTuxSFlR7A";
-            string urlApi = serverAPI.BaseAddress + "search?key="+ key +
-                "&channelId="+channelId +"&part=snippet,id&order=date&maxResults=20";
+            string urlApi = serverAPI.BaseAddress + "search?key=" + keyApi +
+                "&channelId=" + channelId + "&part=snippet,id&order=date&maxResults=20";
 
             HttpResponseMessage reuqestResponseAPI = await serverAPI.GetAsync(urlApi);
             var results = reuqestResponseAPI.Content.ReadAsStringAsync().Result;
@@ -96,43 +109,101 @@ namespace LearnProgram
 
             if (jsonResp != null && jsonResp.items != null)
             {
-                for(int i = 0; i < 2; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     YoutubeVideo vid = YoutubeVideo.FromApi(jsonResp.items[i]);
-                    Console.WriteLine("result est ! ");
-                    Console.WriteLine(vid.ToString());
+                    await GetDetailVideoYoutubeApi(vid);
+                    Run(vid).Wait();
+                    Console.WriteLine("---------------------------------------------------------------");
+
                 }
             }
         }
 
-
-
-        private async Task Run()
+        public static async Task GetDetailVideoYoutubeApi(YoutubeVideo Video)
         {
-            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            string urlApi = serverAPI.BaseAddress + "videos?key=" + keyApi +
+                "&id=" + Video.Id + "&part=contentDetails";
+
+            HttpResponseMessage reuqestResponseAPI = await serverAPI.GetAsync(urlApi);
+            var results = reuqestResponseAPI.Content.ReadAsStringAsync().Result;
+            dynamic jsonResp = JsonConvert.DeserializeObject<ExpandoObject>(results, new ExpandoObjectConverter());
+
+            if (jsonResp != null && jsonResp.items != null && jsonResp.items[0].contentDetails != null)
             {
-                ApiKey = "AIzaSyDsRio2jTT4MLCVsu2zpKXJNqCp-WXB5-4",
-                ApplicationName = this.GetType().ToString()
-            });
+                string Duration = jsonResp.items[0].contentDetails.duration;
+                int StartIndex = 2;
 
-            var searchListRequest = youtubeService.Videos.List("snippet");
-            //searchListRequest.Q = "LiveCoder"; // Replace with your search term.
-            searchListRequest.MaxResults = 50;
+                int IndexHour = Duration.IndexOf('H');
+                //Console.WriteLine("Value Duration " + Duration);
+                if (IndexHour != -1)
+                {
+                    //Console.WriteLine("Start Index " + StartIndex + " Index Hour " + IndexHour);
+                    Video.Hours = Duration.Substring(StartIndex, IndexHour - StartIndex);
+                    StartIndex = IndexHour + 1;
+                }
 
-            // Call the search.list method to retrieve results matching the specified query term.
-            var searchListResponse = await searchListRequest.ExecuteAsync();
+                int IndexMinute = Duration.IndexOf('M');
+                if (IndexMinute != -1)
+                {
+                    //Console.WriteLine("Start Index " + StartIndex + " Index Minute " + IndexMinute);
+                    Video.Minutes = Duration.Substring(StartIndex, IndexMinute - StartIndex);
+                    StartIndex = IndexMinute + 1;
+                }
 
-            List<string> videos = new List<string>();
-            List<string> channels = new List<string>();
-            List<string> playlists = new List<string>();
-
-            Console.WriteLine("----------------------------------------------------");
-
-            foreach (var searchResult in searchListResponse.Items)
-            {
-                Console.WriteLine(searchResult.ToString());
+                int IndexSecond = Duration.IndexOf('S');
+                if (IndexSecond != -1)
+                {
+                    //Console.WriteLine("Start Index " + StartIndex + " Index Second " + IndexSecond);
+                    Video.Seconds = Duration.Substring(StartIndex, IndexSecond - StartIndex);
+                }
+                Video.Duration = "" + ((int.Parse(Video.Hours) * 3600) + (int.Parse(Video.Minutes) * 60) + int.Parse(Video.Seconds));
             }
-            Console.WriteLine("----------------------------------------------------");
+
+            Console.WriteLine(Video.ToString());
+        }
+
+        private static async Task Run(YoutubeVideo Video)
+        {
+
+            Console.WriteLine("Start Recording .... vid " + Video.Title);
+            record("open new Type waveaudio Alias recsound", "", 0, 0);
+            record("record recsound", "", 0, 0);
+
+            int recordDuree = int.Parse(Video.Duration) * 1000 + 3;
+            Console.WriteLine("Durree = " + recordDuree);
+            Thread.Sleep(recordDuree);
+
+            Console.WriteLine("Stop Record ....");
+            record("save recsound D:\\video_" + Video.Id + ".wav", "", 0, 0);
+            record("close recsound", "", 0, 0);
+            Thread.Sleep(5000);
+            Console.WriteLine("End Recording.... vid " + Video.Title);
+
+            //var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            //{
+            //    ApiKey = "AIzaSyDsRio2jTT4MLCVsu2zpKXJNqCp-WXB5-4",
+            //    ApplicationName = this.GetType().ToString()
+            //});
+
+            //var searchListRequest = youtubeService.Videos.List("snippet");
+            ////searchListRequest.Q = "LiveCoder"; // Replace with your search term.
+            //searchListRequest.MaxResults = 50;
+
+            //// Call the search.list method to retrieve results matching the specified query term.
+            //var searchListResponse = await searchListRequest.ExecuteAsync();
+
+            //List<string> videos = new List<string>();
+            //List<string> channels = new List<string>();
+            //List<string> playlists = new List<string>();
+
+            //Console.WriteLine("----------------------------------------------------");
+
+            //foreach (var searchResult in searchListResponse.Items)
+            //{
+            //    Console.WriteLine(searchResult.ToString());
+            //}
+            //Console.WriteLine("----------------------------------------------------");
 
             //// Add each result to the appropriate list, and then display the lists of
             //// matching videos, channels, and playlists.

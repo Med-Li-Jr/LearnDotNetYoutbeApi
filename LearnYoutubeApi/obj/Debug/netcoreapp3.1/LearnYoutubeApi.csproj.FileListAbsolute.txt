@@ -24,3 +24,4 @@ D:\DocStream\LearnYoutubeApi\LearnYoutubeApi\obj\Debug\netcoreapp3.1\LearnYoutub
 D:\DocStream\LearnYoutubeApi\LearnYoutubeApi\obj\Debug\netcoreapp3.1\LearnYoutubeApi.dll
 D:\DocStream\LearnYoutubeApi\LearnYoutubeApi\obj\Debug\netcoreapp3.1\LearnYoutubeApi.pdb
 D:\DocStream\LearnYoutubeApi\LearnYoutubeApi\obj\Debug\netcoreapp3.1\LearnYoutubeApi.genruntimeconfig.cache
+D:\DocStream\LearnYoutubeApi\LearnYoutubeApi\obj\Debug\netcoreapp3.1\LearnYoutubeApi.csprojAssemblyReference.cache
